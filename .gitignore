@@ -3,7 +3,7 @@ __pycache__/
 *.pyo
 *.pyd
 instance/
-.venv/
+.ambiente/
 env/
 *.db
 *.sqlite3
