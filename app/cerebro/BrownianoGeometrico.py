@@ -20,6 +20,12 @@ class MovimientoBrownianoGeometrico:
         
     def brownianoGeometrico(self):
 
+        s = self.inicio
+        lista = [s]
         for t in self.tiempos:
-         pass    
+           eta = np.log(s) + (self.mu - (self.sigma^2)/2)*t
+           nu = (self.sigma^2)*t
+           s = np.random.lognormal(mean=eta, sigma=nu)
+           lista.append(s) 
+
 

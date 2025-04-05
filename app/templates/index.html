@@ -3,20 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Aplicación Web</title>
+    <title>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Mi Aplicación Web</h1>
+        <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
     </header>
     
     <main>
-        <p>¡Esta es una aplicación web de ejemplo usando Flask!</p>
-        <button id="clickMe">Haz clic aquí</button>
+        <p>En construcción</p>
     </main>
-    
+
+    <div class="form-container">
+        <form action="/procesar" method="POST">
+         <div> 
+            <label for="pasos">Número de pasos:</label><br>
+            <input type="number" id="pasos" name="pasos" required min="1" step="1" class="input-field">
+         </div> <br>
+         <div>
+            <label for="tiempo">Horizonte de tiempo:</label><br>
+            <input type="number" id="tiempo" name="tiempo" required min="0" step="0.00001" class="input-field">
+         </div>
+         <button class="btn" type="submit">Graficar</button>
+        </form>
+        
+        <img src="{{ url_for('static', filename='images/graph.png') }}">
+    </div>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
