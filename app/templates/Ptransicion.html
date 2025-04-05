@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <div class="form-container">
+            <a href="{{ url_for('main.index') }}">
+                <button>Home</button>
+            </a>
+            <a href="{{ url_for('main.Euler') }}">
+                <button>Método de Euler</button>
+            </a>
+            <a href="{{ url_for('main.Ptransicion') }}">
+                <button>Probabilidad de transición</button>
+            </a>
+        </div>
+    </header>
+    
+    <main>
+        <p>Simulación con probabilidades de transición</p>
+    </main>
+
+    <div class="form-container">
+        <form action="/procesar" method="POST">
+         <div> 
+            <label for="pasos">Número de pasos:</label><br>
+            <input type="number" id="pasos" name="pasos" required min="1" step="1" class="input-field">
+         </div> <br>
+         <div>
+            <label for="partida">Punto de partida:</label><br>
+            <input type="number" id="partida" name="partida" required min="0.000001" step="0.000001" class="input-field">
+         </div>
+         <div>
+            <label for="tiempo">Horizonte de tiempo:</label><br>
+            <input type="number" id="tiempo" name="tiempo" required min="1" step="0.000001" class="input-field">
+         </div>
+         <div>
+            <label for="drift">Drift:</label><br>
+            <input type="number" id="drift" name="drift" required min="0" step="0.000001" class="input-field">
+         </div>
+         <div>
+            <label for="volatilidad">Volatilidad:</label><br>
+            <input type="number" id="volatilidad" name="volatilidad" required min="0" step="0.000001" class="input-field">
+         </div>
+         <input type="hidden" name="clave" value="transicion">
+         <button class="btn" type="submit">Graficar</button>
+        </form>
+        
+        <img src="{{ url_for('static', filename='images/geometrico.png') }}">
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>

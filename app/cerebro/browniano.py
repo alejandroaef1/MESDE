@@ -33,7 +33,7 @@ class MovimientoBrowniano:
 
     def plot(self):
         """
-        Genera una gráfica del movimiento Browniano.
+        Genera la gráfica
         """
 
         tiempos, trayectoria = self.browniano()
@@ -41,7 +41,6 @@ class MovimientoBrowniano:
         plt.title(f'Movimiento Browniano')
         plt.xlabel('Tiempo')
         plt.ylabel('Posición')
-        plt.show()
         
         image_path = os.path.join(os.path.abspath('app/static/images'), 'graph.png')
         plt.savefig(image_path)  
