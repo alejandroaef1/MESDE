@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 matplotlib.use('Agg')
 import os
 
-class MetodoEuler:
+class MetodoMilstein:
     def __init__(self, n, inicio, t_final, mu, sigma):
 
         self.n = n          
@@ -16,22 +16,24 @@ class MetodoEuler:
         self.sigma =sigma 
        
         
-    def brownianoEuler(self):
-        Z = np.random.normal(0, 1,size=self.n-1)  
-        Z_star = 1 + self.mu*self.dt + self.sigma*np.sqrt(self.dt)*Z
-        trayectoria = self.inicio*np.cumprod(Z_star)
-        trayectoria = np.insert(trayectoria, 0, self.inicio)
+    def brownianoMilstein(self):
+        
+        trayectoria = np.zeros(self.n)
+        trayectoria[0] = self.inicio
+        for i in range(1, self.n):
+          Z = np.random.normal(0, np.sqrt(self.dt))
+          trayectoria[i] = trayectoria[i-1] + self.mu * trayectoria[i-1] * self.dt + self.sigma * trayectoria[i-1] * Z + 0.5 * self.sigma**2 * trayectoria[i-1] * (Z**2 - self.dt)
 
         return self.tiempos, trayectoria
 
     def plot(self):
-        
-        tiempos, trayectoria = self.brownianoEuler()
+
+        tiempos, trayectoria = self.brownianoMilstein()
         plt.plot(tiempos, trayectoria)
-        plt.title(f'Simulación método Euler')
+        plt.title(f'Simulación método Milstein')
         plt.xlabel('Tiempo')
         plt.ylabel('Posición')
         
-        image_path = os.path.join(os.path.abspath('app/static/images'), 'euler.png')
+        image_path = os.path.join(os.path.abspath('app/static/images'), 'milstein.png')
         plt.savefig(image_path)  
         plt.close()

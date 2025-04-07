@@ -15,17 +15,17 @@
             <a href="{{ url_for('main.index') }}">
                 <button>Home</button>
             </a>
-            <a href="{{ url_for('main.Euler') }}">
-                <button>Método de Euler</button>
+            <a href="{{ url_for('main.simulaciones') }}">
+                <button>Simulaciones</button>
             </a>
-            <a href="{{ url_for('main.Ptransicion') }}">
-                <button>Probabilidad de transición</button>
+            <a href="{{ url_for('main.transicion') }}">
+                <button>Transiciones</button>
             </a>
         </div>
     </header>
     
     <main>
-        <p>Simulación con probabilidades de transición</p>
+        <p>Simulaciónes</p>
     </main>
 
     <div class="form-container">
@@ -33,9 +33,9 @@
          <div> 
             <label for="pasos">Número de pasos:</label><br>
             <input type="number" id="pasos" name="pasos" required min="1" step="1" class="input-field">
-         </div> <br>
+         </div> 
          <div>
-            <label for="partida">Punto de partida:</label><br>
+            <label for="partida">Precio de partida:</label><br>
             <input type="number" id="partida" name="partida" required min="0.000001" step="0.000001" class="input-field">
          </div>
          <div>
@@ -50,11 +50,35 @@
             <label for="volatilidad">Volatilidad:</label><br>
             <input type="number" id="volatilidad" name="volatilidad" required min="0" step="0.000001" class="input-field">
          </div>
-         <input type="hidden" name="clave" value="transicion">
+         <!-- <input type="hidden" name="clave" value="transicion"> -->
          <button class="btn" type="submit">Graficar</button>
         </form>
         
-        <img src="{{ url_for('static', filename='images/geometrico.png') }}">
+        <!-- <img src="{{ url_for('static', filename='images/transicion.png') }}"> -->
+        <img id="imagen" src="{{ url_for('static', filename='images/transicion.png') }}" alt="Imagen" />
+    <br />
+    <button onclick="cambiarImagen()">Cambiar Imagen</button>
+
+    <script>
+        // Array con las imágenes
+        const imagenes = [
+            "{{ url_for('static', filename='images/euler.png') }}",
+            "{{ url_for('static', filename='images/transicion.png') }}",
+            "{{ url_for('static', filename='images/milstein.png') }}",
+        ];
+
+        // Índice actual de la imagen
+        let indice = 0;
+
+        // Función para cambiar la imagen
+        function cambiarImagen() {
+            // Incrementamos el índice y lo mantenemos dentro del rango
+            indice = (indice + 1) % imagenes.length;
+            
+            // Cambiamos la imagen
+            document.getElementById('imagen').src = imagenes[indice];
+        }
+    </script>
     </div>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>

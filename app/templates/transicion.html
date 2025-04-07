@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <div class="form-container">
+            <a href="{{ url_for('main.index') }}">
+                <button>Home</button>
+            </a>
+            <a href="{{ url_for('main.simulaciones') }}">
+                <button>Simulaciones</button>
+            </a>
+            <a href="{{ url_for('main.transicion') }}">
+                <button>Transiciones</button>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <p>Probabilidades de transición</p>   
+    </main>
+
+    <div class="form-container">
+        <form action="/calculoTransicion" method="POST" style="display: flex; gap: 20px;">
+            
+            <div style="flex: 1;">  
+                <h3>
+                    Parámetros para la simulaciones
+                </h3>  
+                <div> 
+                    <label for="simulaciones">Número de simulaciones:</label><br>
+                    <input type="number" id="simulaciones" name="simulaciones" required min="1" step="1" class="input-field">
+                </div>     
+                <div> 
+                    <label for="pasos">Número de pasos:</label><br>
+                    <input type="number" id="pasos" name="pasos" required min="1" step="1" class="input-field">
+                </div> 
+                <div>
+                    <label for="partida">Precio de partida:</label><br>
+                    <input type="number" id="partida" name="partida" required min="0.000001" step="0.000001" class="input-field">
+                </div>
+                <div>
+                    <label for="tiempo">Horizonte de tiempo:</label><br>
+                    <input type="number" id="tiempo" name="tiempo" required min="1" step="0.000001" class="input-field">
+                </div>
+                <div>
+                    <label for="drift">Drift:</label><br>
+                    <input type="number" id="drift" name="drift" required min="0" step="0.000001" class="input-field">
+                </div>
+                <div>
+                    <label for="volatilidad">Volatilidad:</label><br>
+                    <input type="number" id="volatilidad" name="volatilidad" required min="0" step="0.000001" class="input-field">
+                </div>
+                <!-- <input type="hidden" name="clave" value="transicion"> -->
+                <button class="btn" type="submit">Obtener distribución</button>
+            </div>  
+            <div style="flex: 1;">
+                <h3>
+                    Segmentación de la distribución
+                </h3>
+                <br>
+                <div>
+                    <label for="segmentos">Número de intervalos:</label><br>
+                    <input type="number" id="segmentos" name="segmentos" required min="1" step="1" class="input-field">
+                </div>
+                <div> 
+                    <label for="corte">Corte:</label><br>
+                    <input type="number" id="corte" name="corte" required min="2" step="1" class="input-field">
+                </div>
+            </div>  
+        </form>
+            
+        <div class="table-responsive">
+            <h3>
+                Distribución:
+            </h3> 
+            {{ tabla_html | safe }}
+        </div>
+    </div>
+    <img id="imagen" src="{{ url_for('static', filename='images/histograma.png') }}" alt="Imagen" />
+
+</body>   
+</html> 

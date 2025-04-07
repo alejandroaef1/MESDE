@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 matplotlib.use('Agg')
 import os
 
-class MovimientoBrownianoGeometrico:
+class MetodoPtransicion:
     def __init__(self, n, inicio, t_final, mu, sigma):
 
         self.n = n           
@@ -17,7 +17,7 @@ class MovimientoBrownianoGeometrico:
         self.eta = np.log(self.inicio) + (self.mu - (self.sigma**2)/2)*self.dt
         self.nu = (self.sigma**2)*self.dt
 
-    def brownianoGeometrico(self):
+    def brownianoTransicion(self):
 
         trayectoria = np.zeros(self.n)
         trayectoria[0] = self.inicio
@@ -29,13 +29,13 @@ class MovimientoBrownianoGeometrico:
 
     def plot(self):
 
-        tiempos, trayectoria = self.brownianoGeometrico()
+        tiempos, trayectoria = self.brownianoTransicion()
         plt.plot(tiempos, trayectoria)
         plt.title(f'Simulación con probabilidades de transición')
         plt.xlabel('Tiempo')
         plt.ylabel('Posición')
         
-        image_path = os.path.join(os.path.abspath('app/static/images'), 'geometrico.png')
+        image_path = os.path.join(os.path.abspath('app/static/images'), 'transicion.png')
         plt.savefig(image_path)  
         plt.close()
 

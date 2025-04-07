@@ -83,4 +83,25 @@ form div {
     padding: 5px;
     margin: 5px 0;
 }
+.table-responsive {
+    max-height: 400px; /* Altura máxima del contenedor */
+    overflow-y: auto; /* Barra de desplazamiento vertical si es necesario */
+    overflow-x: auto; /* Barra de desplazamiento horizontal si es necesario */
+    border: 1px solid #ccc; /* Borde para el contenedor */
+    margin: 20px 0; /* Espaciado superior e inferior */
+}
 
+table {
+    width: 100%; /* La tabla ocupa el 100% del ancho del contenedor */
+    border-collapse: collapse; /* Para que las celdas no tengan espacio entre ellas */
+}
+
+th, td {
+    padding: 10px; /* Espaciado dentro de las celdas */
+    border: 1px solid #ddd; /* Borde de las celdas */
+    text-align: left; /* Alineación del texto en las celdas */
+}
+
+th {
+    background-color: #f2f2f2; /* Color de fondo de las cabeceras */
+}

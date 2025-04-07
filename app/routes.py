@@ -1,6 +1,10 @@
 from flask import Flask, Blueprint, render_template, request, session, redirect, url_for
-from app.cerebro.BrownianoGeometrico import MovimientoBrownianoGeometrico
+import pandas as pd
+from app.cerebro.Ptrancision import MetodoPtransicion
 from app.cerebro.Euler import MetodoEuler
+from app.cerebro.Milstein import MetodoMilstein
+from app.cerebro.Estimacion import estimadorTransicion
+from app.cerebro.Refinamiento import Refinamiento
 
 bp = Blueprint('main', __name__)
 
@@ -8,16 +12,16 @@ bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
-@bp.route('/Probabilidades-de-transicion')
-def Ptransicion():
-    return render_template('Ptransicion.html')
+@bp.route('/simulaciones')
+def simulaciones():
+    return render_template('simulaciones.html') 
 
-@bp.route('/Método-de-Euler')
-def Euler():
-    return render_template('Euler.html')
+@bp.route('/transicion')
+def transicion():
+    return render_template('transicion.html')
 
 @bp.route('/procesar', methods=['POST'])
-def procesar():    
+def procesar():        
     
     # Obtener los datos del formulario y almacenarlos en la sesión
     pasos = int(request.form['pasos'])
@@ -25,47 +29,45 @@ def procesar():
     tiempo = float(request.form['tiempo'])
     drift = float(request.form['drift'])
     volatilidad = float(request.form['volatilidad'])
-    clave = request.form['clave']
-
-    # Almacenar los valores en la sesión
-    session['pasos'] = pasos
-    session['partida'] = partida
-    session['tiempo'] = tiempo
-    session['drift'] = drift
-    session['volatilidad'] = volatilidad
-    session['clave'] = clave
-
-    pasos = session.get('pasos')
-    partida = session.get('partida')
-    tiempo = session.get('tiempo')
-    drift = session.get('drift')
-    volatilidad = session.get('volatilidad')
-    clave = session.get('clave')
+ 
+    browniano = MetodoPtransicion(pasos, partida, tiempo, drift, volatilidad)
+    browniano.brownianoTransicion()
+    browniano.plot()
     
-    if clave =='transicion':
+    browniano = MetodoEuler(pasos, partida, tiempo, drift, volatilidad)
+    browniano.brownianoEuler()
+    browniano.plot()
 
-        browniano = MovimientoBrownianoGeometrico(pasos, partida, tiempo, drift, volatilidad)
-        browniano.brownianoGeometrico()
-        browniano.plot()
-
-        return redirect(url_for('main.ptransicion')) 
-
-    elif clave=='euler':    
-        browniano = MetodoEuler(pasos, partida, tiempo, drift, volatilidad)
-        browniano.brownianoEuler()
-        browniano.plot()
+    browniano = MetodoMilstein(pasos, partida, tiempo, drift, volatilidad)
+    browniano.brownianoMilstein()
+    browniano.plot()
     
-        return redirect(url_for('main.meuler'))
+    return redirect(url_for('main.simulaciones'))   
 
-@bp.route('/ptransicion')
-def ptransicion():
-    # Aquí se muestra el resultado del procesamiento
-    return render_template('Ptransicion.html') 
+@bp.route('/calculoTransicion', methods=['POST'])     
+def calculoTransicion():
+    
+    # Parametros del BG y sus simulaciones
+    simulaciones = int(request.form['simulaciones'])
+    corte = int(request.form['corte'])
+    pasos = int(request.form['pasos'])
+    partida = float(request.form['partida'])
+    tiempo = float(request.form['tiempo'])
+    drift = float(request.form['drift'])
+    volatilidad = float(request.form['volatilidad'])
 
-@bp.route('/meuler')
-def meuler():
-    # Aquí se muestra el resultado del procesamiento
-    return render_template('Euler.html')    
+    # Parámetros de la transición
+    segmentos = int(request.form['segmentos'])
+
+    transiciones = estimadorTransicion(simulaciones, corte, pasos, partida, tiempo, drift, volatilidad)
+    probabilidades = transiciones.calculoDistribucion()
+    segmentacion = Refinamiento(probabilidades, segmentos)
+    transiciones_calculadas = segmentacion.segmentacion()
+    tabla_html = transiciones_calculadas.to_html()
+
+    return render_template('transicion.html', tabla_html=tabla_html)
+
+
 
 app = Flask(__name__)
 app.register_blueprint(bp)
