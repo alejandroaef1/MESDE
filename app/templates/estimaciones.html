@@ -1,0 +1,89 @@
+!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_estimadores.css') }}">
+    <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>      
+</head>
+<body>
+    <header>
+        <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
+        <br>
+        <p>Alejandro Antonio Estrada Franco</p>
+       <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
+        <div class="form-container-2">
+            <a href="{{ url_for('main.index') }}">
+                <button>Home</button>
+            </a>
+            <a href="{{ url_for('main.simulaciones') }}">
+                <button>Simulaciones</button>
+            </a>
+            <a href="{{ url_for('main.estimaciones') }}">
+                <button>Estimadores</button>
+            </a>
+            <a href="{{ url_for('main.transicion') }}">
+                <button>Transiciones</button>
+            </a>
+        </div>
+    </header>
+    
+    <main>
+
+      <div class="form-container">
+            <form action="/procesar2" method="POST">
+                
+                <div class="form-container-3">
+                    <div>
+                        <div> 
+                            <label for="pasos">Número de pasos:</label><br>
+                            <input type="number" id="pasos" name="pasos" required min="1" step="1" class="input-field">
+                        </div> 
+                        <div>
+                            <label for="partida">Precio de partida:</label><br>
+                            <input type="number" id="partida" name="partida" required min="0.000001" step="0.000001" class="input-field">
+                        </div>
+                        <div>
+                            <label for="tiempo">Horizonte de tiempo:</label><br>
+                            <input type="number" id="tiempo" name="tiempo" required min="1" step="0.000001" class="input-field">
+                        </div>
+                        <div>
+                            <label for="drift">Drift:</label><br>
+                            <input type="number" id="drift" name="drift" required min="0" step="0.000001" class="input-field">
+                        </div>
+                        <div>
+                            <label for="volatilidad">Volatilidad:</label><br>
+                            <input type="number" id="volatilidad" name="volatilidad" required min="0" step="0.000001" class="input-field">
+                        </div>
+                        <!-- <input type="hidden" name="clave" value="transicion"> -->
+                        <button class="btn" type="submit">Estimar</button>
+                    </div>
+                    <div class="form-container">
+                        <p>\(dX_{t}=\mu X_{t}dt+\sigma X_{t}dW_{t}\)<br><br>
+                        \(\mu :Drift\hspace{0.5cm}\sigma :Volatilidad \)
+                        </p>    
+                    </div>    
+                </div>
+
+                <div class="table-responsive">
+                    <h3>
+                        Estimadores:
+                    </h3> 
+                    {{ tabla_html2 | safe }}
+                </div>
+                <div>
+                    <img id="imagen" src="{{ url_for('static', filename='images/euler.png') }}" alt="Imagen" />
+                    <img id="imagen" src="{{ url_for('static', filename='images/drift.png') }}" alt="Imagen" />
+                </div>
+            </form>
+      </div>
+      
+    </main>
+
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

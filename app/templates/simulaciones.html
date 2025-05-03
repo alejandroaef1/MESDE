@@ -10,13 +10,18 @@
 <body>
     <header>
         <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <br>
+        <p>Alejandro Antonio Estrada Franco</p>
+     <!--   <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
         <div class="form-container">
             <a href="{{ url_for('main.index') }}">
                 <button>Home</button>
             </a>
             <a href="{{ url_for('main.simulaciones') }}">
                 <button>Simulaciones</button>
+            </a>
+            <a href="{{ url_for('main.estimaciones') }}">
+                <button>Estimadores</button>
             </a>
             <a href="{{ url_for('main.transicion') }}">
                 <button>Transiciones</button>

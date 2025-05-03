@@ -10,13 +10,18 @@
 <body>
     <header>
         <h1>Métodos Estadísticos Para Ecuaciones Diferenciales Estocásticas</h1>
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <br>
+        <p>Alejandro Antonio Estrada Franco</p>
+    <!--    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
         <div class="form-container">
             <a href="{{ url_for('main.index') }}">
                 <button>Home</button>
             </a>
             <a href="{{ url_for('main.simulaciones') }}">
                 <button>Simulaciones</button>
+            </a>
+            <a href="{{ url_for('main.estimaciones') }}">
+                <button>Estimadores</button>
             </a>
             <a href="{{ url_for('main.transicion') }}">
                 <button>Transiciones</button>
@@ -67,10 +72,6 @@
                     Segmentación de la distribución
                 </h3>
                 <br>
-                <div>
-                    <label for="segmentos">Número de intervalos:</label><br>
-                    <input type="number" id="segmentos" name="segmentos" required min="1" step="1" class="input-field">
-                </div>
                 <div> 
                     <label for="corte">Corte:</label><br>
                     <input type="number" id="corte" name="corte" required min="2" step="1" class="input-field">

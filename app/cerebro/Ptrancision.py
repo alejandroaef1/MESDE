@@ -3,6 +3,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('Agg')
 import os
+from scipy.stats import lognorm
 
 class MetodoPtransicion:
     def __init__(self, n, inicio, t_final, mu, sigma):
@@ -14,16 +15,16 @@ class MetodoPtransicion:
         self.inicio = inicio 
         self.mu = mu 
         self.sigma =sigma       
-        self.eta = np.log(self.inicio) + (self.mu - (self.sigma**2)/2)*self.dt
-        self.nu = (self.sigma**2)*self.dt
+        self.forma = self.sigma*np.sqrt(self.dt)
 
     def brownianoTransicion(self):
-
+        s = self.inicio
         trayectoria = np.zeros(self.n)
-        trayectoria[0] = self.inicio
+        trayectoria[0] = s
         for i in range(1,self.n):
-            increment = np.random.lognormal((self.mu - 0.5 * self.sigma**2) * self.dt, self.sigma * np.sqrt(self.dt))
-            trayectoria[i] = trayectoria[i-1] * increment
+            escala = s*np.exp((self.mu - (self.sigma**2)*0.5)*self.dt)
+            s = lognorm.rvs(self.forma,scale=escala) 
+            trayectoria[i] = s 
 
         return self.tiempos, trayectoria
 
