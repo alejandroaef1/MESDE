@@ -7,6 +7,7 @@ from app.cerebro.Estimacion import estimadorTransicion
 from app.cerebro.PHipotesis import PruebaHipotesis
 from app.cerebro.EstimadoresML import EstimadoresMl
 from app.cerebro.graficaMu import graficaMu
+from app.cerebro.datosReales import SerieTiempo
 
 bp = Blueprint('main', __name__)
 
@@ -19,6 +20,10 @@ Templates para las páginas del sitio
 # Home
 @bp.route('/')
 def index():
+    #Grafica serie de tiempo
+    serie = SerieTiempo()
+    serie.serieTemporal()
+    serie.serieTemporalSegmentada()
     return render_template('index.html')
 
 # Simulaciones
