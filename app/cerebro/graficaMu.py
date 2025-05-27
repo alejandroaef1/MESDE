@@ -20,7 +20,7 @@ class graficaMu:
             browniano = MetodoEuler(self.n,self.i,self.T,self.mu,volatilidad[i])
             _, trayectoria = browniano.brownianoEuler()
             estimadores = EstimadoresMl(self.T,trayectoria)
-            mu, _ = estimadores.estimaciones()
+            mu, _, _ = estimadores.estimaciones()
             drift.append(mu)
 
         plt.plot(volatilidad,drift)

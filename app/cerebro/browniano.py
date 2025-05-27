@@ -16,10 +16,11 @@ class MovimientoBrowniano:
   
         # Simulación del movimiento Browniano utilizando la ecuación:
         # W(t) = W(t-1) + sqrt(dt)*Z
-        Z = np.random.normal(0, 1, self.n)  
+        Z = np.random.normal(0, 1, self.n -1) 
         pasos = np.sqrt(self.dt) * Z
-        trayectoria = np.cumsum(pasos)  
-
+        trayectoria = np.insert(pasos,0,0)
+        trayectoria = np.cumsum(trayectoria) 
+    
         return self.tiempos, trayectoria
 
     def plot(self):

@@ -51,7 +51,6 @@ class estimadorTransicion:
              lista_muestrario_3.append(trayectoria)
 
         muestrario_3 = pd.DataFrame(lista_muestrario_3)
-        print(muestrario_3)
         muestrario_3.columns = [f'C_{i+1}' for i in range(muestrario_3.shape[1])]
         
 

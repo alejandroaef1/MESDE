@@ -1,5 +1,9 @@
-from flask import Flask, Blueprint, render_template, request, session, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, session, redirect, url_for, jsonify
 import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+matplotlib.use('Agg')
+import os
 from app.cerebro.Ptrancision import MetodoPtransicion
 from app.cerebro.Euler import MetodoEuler
 from app.cerebro.Milstein import MetodoMilstein
@@ -8,13 +12,12 @@ from app.cerebro.PHipotesis import PruebaHipotesis
 from app.cerebro.EstimadoresML import EstimadoresMl
 from app.cerebro.graficaMu import graficaMu
 from app.cerebro.datosReales import SerieTiempo
+from app.cerebro.residuales  import Residuales
 
 bp = Blueprint('main', __name__)
 
-###############################################################
-"""""
-Templates para las páginas del sitio
-"""
+################################################################
+################## PESTAÑAS ####################################
 ################################################################
 
 # Home
@@ -22,9 +25,26 @@ Templates para las páginas del sitio
 def index():
     #Grafica serie de tiempo
     serie = SerieTiempo()
-    serie.serieTemporal()
-    serie.serieTemporalSegmentada()
-    return render_template('index.html')
+    fechas, valores = serie.serieTemporal_pandas()
+    serie.grafica(fechas,valores)
+    # Estimadores en serie de tiempo
+    numeracion = list(range(0, len(fechas)))
+    numeracion = [x/len(numeracion) for x in numeracion]
+    T = len(numeracion)
+    
+
+    estimadores = EstimadoresMl(T,valores)
+    mu, sigma, dicc = estimadores.estimaciones()
+    graficaE = MetodoEuler(dicc['Número de pasos'],dicc['Precio inicial'],dicc['Horizonte de tiempo'],dicc['μ'],dicc['σ'])
+    
+    for i in [0,1,2]:
+       graficaE.plot_wc()
+
+    tabla = pd.DataFrame(data=[mu, sigma], index=['μ', 'σ'])
+    tabla_html = tabla.to_html()
+                              
+
+    return render_template('index.html', tabla_html=tabla_html)
 
 # Simulaciones
 @bp.route('/simulaciones')
@@ -42,10 +62,43 @@ def estimaciones():
     return render_template('estimaciones.html')
 
 ###########################################################################
-"""""
-Acciones
-"""
+#################  ACCIONES ###############################################
 ###########################################################################
+
+############################
+"""""
+Acciones en página de inicio
+"""
+############################
+@bp.route('/test', methods=['POST'])
+def test():
+    #Grafica serie de tiempo
+    serie = SerieTiempo()
+    fechas, valores = serie.serieTemporal_pandas()
+    serie.grafica(fechas,valores)
+    # Estimadores en serie de tiempo
+    numeracion = list(range(0, len(fechas)))
+    numeracion = [x/len(numeracion) for x in numeracion]
+    T = len(numeracion)
+
+    estimadores = EstimadoresMl(T,valores)
+    mu, sigma, dicc = estimadores.estimaciones()
+    muestra = Residuales(dicc['Número de pasos'],dicc['Precio inicial'],dicc['Horizonte de tiempo'],mu,sigma,10000)
+    muestrario, pvalor = muestra.residuales()
+
+    muestrario.plot.hist(bins=100, alpha=0.7, color='skyblue', edgecolor='black')
+    plt.title("Histograma")
+    plt.xlabel("Valor")
+    plt.ylabel("Frecuencia")
+    image_path = os.path.join(os.path.abspath('app/static/images'), 'hist_muestrario.png')
+    plt.savefig(image_path)  
+    plt.close()
+    
+    pasos = dicc['Número de pasos']
+    tiempo = dicc['Horizonte de tiempo']
+    pinicial = dicc['Precio inicial']
+
+    return jsonify({'pvalor': pvalor,'pasos': pasos,'tiempo': tiempo,'pinicial': pinicial})
 
 # Acción de la pestaña simulaciones
 @bp.route('/procesar', methods=['POST'])
@@ -93,6 +146,8 @@ def calculoTransicion():
     _, p_valor1 = hipotesis1.prueba()
     hipotesis2 = PruebaHipotesis(probabilidades2,probabilidades3)
     _, p_valor2 = hipotesis2.prueba()
+    p_valor1 = {'p valor':p_valor1}
+    p_valor2 = {'p valor':p_valor2}
     tabla = pd.DataFrame(data=[p_valor1,p_valor2])
     tabla_html = tabla.to_html()
 
@@ -114,7 +169,7 @@ def procesar2():
     browniano.plot()
 
     estimadores = EstimadoresMl(tiempo,trayectoria)
-    mu, sigma = estimadores.estimaciones()
+    mu, sigma, _ = estimadores.estimaciones()
     
     tabla2 = pd.DataFrame(data=[mu, sigma], index=['μ', 'σ'])
     tabla_html2 = tabla2.to_html()
@@ -123,6 +178,7 @@ def procesar2():
     graficaDrift.calculos()
 
     return render_template('estimaciones.html', tabla_html2=tabla_html2)
+
 
 app = Flask(__name__)
 app.register_blueprint(bp)

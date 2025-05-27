@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script id="MathJax-script" async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <script>
+        async function ejecutarTest() {
+            const response = await fetch('/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})  // puedes incluir parámetros si los necesitas
+            });
+
+            const data = await response.json();
+            document.getElementById('resultado').textContent = "p-valor: " + data.pvalor + ";" + " Precio inicial: " + "COL$ " + data.pinicial + ";" + "  N° Pasos: " + data.pasos +";"+ " Horizonte de tiempo: " + data.tiempo;
+        }
     </script>      
 </head>
 <body>
@@ -35,9 +49,28 @@
         <p>Home</p>
     </main>
 
-    <img id="imagen" src="{{ url_for('static', filename='images/stiempo.png') }}" alt="Imagen" />
+    <img id="imagen" src="{{ url_for('static', filename='images/euler_wc.png') }}" alt="Imagen" />
     <img id="imagen" src="{{ url_for('static', filename='images/stiempoParcial.png') }}" alt="Imagen" />
 
+    <div class="table-responsive">
+                    <h3>
+                        Estimadores:
+                    </h3> 
+                    {{ tabla_html | safe }}
+    </div>
+    <div>
+        <h1>Prueba de hipótesis</h1>
+        <button onclick="ejecutarTest()">Ejecutar test</button>
+
+        <div id="resultado" style="margin-top: 20px; font-size: 1.5em;"></div>
+        <div style="margin-top: 20px;">
+            <img id="imagen" 
+                src="{{ url_for('static', filename='images/hist_muestrario.png') }}"
+                alt="Histograma"
+                style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
+        </div>
+    </div>
+    
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
