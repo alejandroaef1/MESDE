@@ -26,7 +26,6 @@ Sigue estos pasos para poner en marcha la aplicación:
     ![Acceso a la aplicación](https://github.com/user-attachments/assets/93887b97-6d15-4ad3-91a6-7b1bb336a137)
 
 
-![image](https://github.com/user-attachments/assets/33ae3ba8-623d-4d57-8f8f-365643157217)
 
 
 
